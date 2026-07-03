@@ -25,7 +25,6 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
   }
-  }
 
   try {
     if (LIVEKIT_URL === undefined) {
