@@ -10,6 +10,7 @@ type ConnectionDetails = {
 };
 
 // NOTE: you are expected to define the following environment variables in `.env.local`:
+const TESTING_ACCESS_CODE = process.env.TESTING_ACCESS_CODE;
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
@@ -19,9 +20,11 @@ export const revalidate = 0;
 
 export async function POST(req: Request) {
   if (process.env.NODE_ENV !== 'development') {
-    throw new Error(
-      'THIS API ROUTE IS INSECURE. DO NOT USE THIS ROUTE IN PRODUCTION WITHOUT AN AUTHENTICATION LAYER.'
-    );
+    const providedCode = req.headers.get('x-access-code');
+    if (!TESTING_ACCESS_CODE || providedCode !== TESTING_ACCESS_CODE) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+  }
   }
 
   try {
